@@ -35,7 +35,8 @@ jobs:
           aws-access-key-id: ${{ secrets[format('{0}_{1}', 'AWS_ACCESS_KEY_ID', matrix.workspace)] }}
           aws-secret-access-key: ${{ secrets[format('{0}_{1}', 'AWS_SECRET_ACCESS_KEY', matrix.workspace)] }}
           aws-region: ${{ env.AWS_REGION }}
-
+      - name: Check credentials
+        run: aws sts get-caller-identity
       - name: Terraform Init
         run: terraform init
 
@@ -50,5 +51,3 @@ jobs:
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main'
         run: terraform apply -auto-approve tfplan-${{ matrix.workspace }} -var-file="environments/${{ matrix.workspace }}/terraform.tfvars"
-
-        
