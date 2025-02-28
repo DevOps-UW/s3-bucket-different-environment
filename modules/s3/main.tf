@@ -373,7 +373,7 @@ resource "aws_s3_bucket_policy" "this" {
 
   bucket = aws_s3_bucket.this[0].id
   # policy = data.aws_iam_policy_document.combined[0].json
-  
+
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
@@ -381,7 +381,7 @@ resource "aws_s3_bucket_policy" "this" {
         Effect    = "Allow"
         Principal = "*"
         Action    = "s3:GetObject"
-        Resource  = "*"
+        Resource  = "arn:aws:s3:::${aws_s3_bucket.this[0].bucket}/*"
       }
     ]
   })
