@@ -1,0 +1,32 @@
+# Ignore Terraform state files
+terraform.tfstate
+terraform.tfstate.backup
+# *.tfstate.*
+# *.tfvars.json
+
+# Ignore crash logs
+crash.log
+
+# Ignore Terraform plan output files
+*.tfplan
+
+# Ignore .terraform directory (used for Terraform initialization)
+.terraform/
+.terraform.lock.hcl
+
+# Ignore any sensitive tfvars files
+# terraform.tfvars
+*.auto.tfvars
+
+# Ignore provider-specific files (e.g., AWS credentials)
+.aws-sam/
+.aws/
+*.pem
+*.key
+
+# Ignore logs and temporary files
+*.log
+*.bak
+*.swp
+*.swo
+*.DS_Store
