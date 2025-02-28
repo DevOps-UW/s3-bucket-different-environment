@@ -54,4 +54,4 @@ jobs:
       # Apply only if the commit is in the main branch (merged PR)
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main'
-        run: terraform apply -auto-approve tfplan-${{ matrix.workspace }} -var-file="environments/${{ matrix.workspace }}/terraform.tfvars"
+        run: terraform apply -auto-approve -var-file="environments/${{ matrix.workspace }}/terraform.tfvars"
