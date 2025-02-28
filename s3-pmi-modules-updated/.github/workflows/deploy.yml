@@ -1,0 +1,54 @@
+name: Terraform Deployment
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+env:
+  AWS_REGION: "us-east-1"
+
+jobs:
+  terraform-plan:
+    name: Terraform Plan And Apply (if merged)
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    strategy:
+      matrix:
+        workspace: [pmi, bbq, mti] # Running for all environments
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets[format('{0}_{1}', 'AWS_ACCESS_KEY_ID', matrix.workspace)] }}
+          aws-secret-access-key: ${{ secrets[format('{0}_{1}', 'AWS_SECRET_ACCESS_KEY', matrix.workspace)] }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Select Workspace or Create if Missing
+        run: |
+          terraform workspace select ${{ matrix.workspace }} || terraform workspace new ${{ matrix.workspace }}
+
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan-${{ matrix.workspace }} -var-file="environments/${{ matrix.workspace }}/terraform.tfvars"
+
+      # Apply only if the commit is in the main branch (merged PR)
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main'
+        run: terraform apply -auto-approve tfplan-${{ matrix.workspace }} -var-file="environments/${{ matrix.workspace }}/terraform.tfvars"
+
+        
