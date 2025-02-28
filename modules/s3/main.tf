@@ -424,7 +424,6 @@ locals {
     cn-north-1     = "638102146993"
     cn-northwest-1 = "037604701340"
   }
-  elb_service_accounts = {}
 }
 
 data "aws_iam_policy_document" "elb_log_delivery" {
