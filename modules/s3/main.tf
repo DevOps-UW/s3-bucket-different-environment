@@ -368,16 +368,28 @@ resource "aws_s3_bucket_object_lock_configuration" "this" {
 }
 
 
-# resource "aws_s3_bucket_policy" "this" {
-#   count = local.create_bucket && local.attach_policy ? 1 : 0
+resource "aws_s3_bucket_policy" "this" {
+  count = local.create_bucket && local.attach_policy ? 1 : 0
 
-#   bucket = aws_s3_bucket.this[0].id
-#   policy = data.aws_iam_policy_document.combined[0].json
+  bucket = aws_s3_bucket.this[0].id
+  # policy = data.aws_iam_policy_document.combined[0].json
+  
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect    = "Allow"
+        Principal = "*"
+        Action    = "s3:GetObject"
+        Resource  = "*"
+      }
+    ]
+  })
 
-#   depends_on = [
-#     aws_s3_bucket_public_access_block.this
-#   ]
-# }
+  depends_on = [
+    aws_s3_bucket_public_access_block.this
+  ]
+}
 
 data "aws_iam_policy_document" "combined" {
   count = local.create_bucket && local.attach_policy ? 1 : 0
