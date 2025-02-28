@@ -2,7 +2,7 @@
 region = "us-east-1"
 
 # Bucket name
-bucket_name = "pmi-testing-bkt"
+bucket_name = "854473044844-pmi-testing-bkt"
 
 #s3 access loging (do not change this section however make sure the bucket name match the environmnet you want to peovision in)
 log_bucket_name = "pmi-logs-test"
