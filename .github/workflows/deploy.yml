@@ -20,7 +20,7 @@ jobs:
       contents: read
     strategy:
       matrix:
-        workspace: [PMI] # Running for all environments
+        workspace: [pmi] # Running for all environments
 
     steps:
       - name: Checkout Code
@@ -29,11 +29,15 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
+      - name: Convert workspace to uppercase
+        id: set_uppercase
+        run: echo "UPPERCASE_WORKSPACE=$(echo ${{ matrix.workspace }} | tr '[:lower:]' '[:upper:]')" >> $GITHUB_ENV
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v3
         with:
-          aws-access-key-id: ${{ secrets[format('{0}_{1}', 'AWS_ACCESS_KEY_ID', matrix.workspace)] }}
-          aws-secret-access-key: ${{ secrets[format('{0}_{1}', 'AWS_SECRET_ACCESS_KEY', matrix.workspace)] }}
+          aws-access-key-id: ${{ secrets[format('{0}_{1}', 'AWS_ACCESS_KEY_ID', env.UPPERCASE_WORKSPACE)] }}
+          aws-secret-access-key: ${{ secrets[format('{0}_{1}', 'AWS_SECRET_ACCESS_KEY', env.UPPERCASE_WORKSPACE)] }}
           aws-region: ${{ env.AWS_REGION }}
       - name: Check credentials
         run: aws sts get-caller-identity
