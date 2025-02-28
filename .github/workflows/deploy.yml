@@ -20,7 +20,7 @@ jobs:
       contents: read
     strategy:
       matrix:
-        workspace: [pmi, bbq, mti] # Running for all environments
+        workspace: [PMI, BBQ, MTI] # Running for all environments
 
     steps:
       - name: Checkout Code
