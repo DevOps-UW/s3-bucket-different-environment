@@ -12,7 +12,6 @@ env:
   AWS_REGION: "us-east-1"
   AWS_BACKEND_PROFILE: "central-account"
   CENTRAL_BACKEND_ROLE_ARN: "arn:aws:iam::011624006725:role/GitHubAction-AssumeRoleWithAction"
-  CURRENT_ACCOUNT_ROLE_ARN: "arn:aws:iam::011624006725:role/GitHubAction-AssumeRoleWithAction"
 
 jobs:
   terraform-plan:
@@ -24,6 +23,7 @@ jobs:
     strategy:
       matrix:
         workspace: [mti] # Running for all environments
+        account_role: [ "arn:aws:iam::011624006725:role/GitHubAction-AssumeRoleWithAction" ]
 
     steps:
       - name: Checkout Code
@@ -58,7 +58,7 @@ jobs:
       - name: Configure aws credentials for current account
         uses: aws-actions/configure-aws-credentials@v3
         with:
-          role-to-assume: ${{ env.CURRENT_ACCOUNT_ROLE_ARN }}
+          role-to-assume: ${{ matrix.account_role }}
           role-session-name: GitHub_to_AWS_via_FederatedOIDC
           aws-region: ${{ env.AWS_REGION }}
       
