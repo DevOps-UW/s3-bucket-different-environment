@@ -10,7 +10,7 @@ on:
 
 env:
   AWS_REGION: "us-east-1"
-  AWS_BACKEND_PROFILE: "central-profile"
+  AWS_BACKEND_PROFILE: "central-account"
   CENTRAL_BACKEND_ROLE_ARN: "arn:aws:iam::011624006725:role/GitHubAction-AssumeRoleWithAction"
   CURRENT_ACCOUNT_ROLE_ARN: "arn:aws:iam::011624006725:role/GitHubAction-AssumeRoleWithAction"
 
