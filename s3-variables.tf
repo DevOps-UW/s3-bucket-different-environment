@@ -1,16 +1,3 @@
-## Backend
-variable "backend_profile" {
-  type = string
-  description = "Backend AWS profile"
-  default = "central-account"
-}
-
-variable "backend_bucket" {
-  type = string
-  description = "Backend S3 Bucket"
-  default = "011624006725-backed-pmi"
-}
-
 variable "region" {
   description = "The AWS region to deploy resources in"
   type        = string

@@ -4,6 +4,6 @@ terraform {
     key    = "tf-state/terraform.tfstate"
     region = "us-east-1"
     encrypt = true
-    profile = var.backend_profile
+    profile = "central-account"
   }
 }
