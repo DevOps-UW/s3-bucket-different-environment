@@ -40,7 +40,7 @@ jobs:
           aws configure set aws_secret_access_key ${{ secrets[format('{0}_{1}', 'AWS_SECRET_ACCESS_KEY', env.UPPERCASE_WORKSPACE)] }} --profile ${{ env.AWS_BACKEND_PROFILE }}
           aws configure set region ${{ env.AWS_REGION }} --profile ${{ env.AWS_BACKEND_PROFILE }}  
         
-      - name: Sts GetCallerIdentity
+      - name: List profiles
         run: |
           aws configure list-profiles
 
@@ -86,7 +86,7 @@ jobs:
       - name: Terraform Plan
         run: terraform plan -out=tfplan-${{ matrix.workspace }} -var-file="environments/${{ matrix.workspace }}/terraform.tfvars"
 
-      # # Apply only if the commit is in the main branch (merged PR)
-      # - name: Terraform Apply
-      #   if: github.ref == 'refs/heads/main'
-      #   run: terraform apply -auto-approve -var-file="environments/${{ matrix.workspace }}/terraform.tfvars"
+      # Apply only if the commit is in the main branch (merged PR)
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main'
+        run: terraform apply -auto-approve -var-file="environments/${{ matrix.workspace }}/terraform.tfvars"
