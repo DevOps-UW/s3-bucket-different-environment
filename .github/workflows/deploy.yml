@@ -43,10 +43,10 @@ jobs:
       
       - name: Sts GetCallerIdentity
         run: |
-          aws sts get-caller-identity
           aws configure list-profiles
-
-
+        
+        
+        # aws sts get-caller-identity
       # - name: Configure AWS Credentials
       #   uses: aws-actions/configure-aws-credentials@v3
       #   with:
