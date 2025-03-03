@@ -34,13 +34,12 @@ jobs:
         run: echo "UPPERCASE_WORKSPACE=$(echo ${{ matrix.workspace }} | tr '[:lower:]' '[:upper:]')" >> $GITHUB_ENV
 
       - name: configure aws credentials
-        uses: aws-actions/configure-aws-credentials@v1.7.0
+        uses: aws-actions/configure-aws-credentials@v3
         with:
           role-to-assume: arn:aws:iam::011624006725:role/GitHubAction-AssumeRoleWithAction
           role-session-name: GitHub_to_AWS_via_FederatedOIDC
           aws-region: ${{ env.AWS_REGION }}
       
-      # Hello from AWS: WhoAmI
       - name: Sts GetCallerIdentity
         run: |
           aws sts get-caller-identity
