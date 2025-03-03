@@ -34,6 +34,16 @@ jobs:
         id: set_uppercase
         run: echo "UPPERCASE_WORKSPACE=$(echo ${{ matrix.workspace }} | tr '[:lower:]' '[:upper:]')" >> $GITHUB_ENV
 
+      - name: Access central S3 backend in
+        run: |
+          aws configure set aws_access_key_id ${{ secrets[format('{0}_{1}', 'AWS_ACCESS_KEY_ID', env.UPPERCASE_WORKSPACE)] }} --profile ${{ env.AWS_BACKEND_PROFILE }}
+          aws configure set aws_secret_access_key ${{ secrets[format('{0}_{1}', 'AWS_SECRET_ACCESS_KEY', env.UPPERCASE_WORKSPACE)] }} --profile ${{ env.AWS_BACKEND_PROFILE }}
+          aws configure set region ${{ env.AWS_REGION }} --profile ${{ env.AWS_BACKEND_PROFILE }}  
+        
+      - name: Sts GetCallerIdentity
+        run: |
+          aws configure list-profiles
+
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v3
         with:
@@ -54,17 +64,13 @@ jobs:
       #     echo "CENTRAL_AWS_SESSION_TOKEN=${{ env.AWS_SESSION_TOKEN }}" >> $GITHUB_ENV
 
       # set central-account profile
-      - name: Access central S3 backend in
-        run: |
-          aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY_ID }} --profile ${{ env.AWS_BACKEND_PROFILE }}
-          aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }} --profile ${{ env.AWS_BACKEND_PROFILE }}
-          aws configure set aws_session_token ${{ env.AWS_SESSION_TOKEN }} --profile ${{ env.AWS_BACKEND_PROFILE }}
-          aws configure set region ${{ env.AWS_REGION }} --profile ${{ env.AWS_BACKEND_PROFILE }}  
+      # - name: Access central S3 backend in
+      #   run: |
+      #     aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY_ID }} --profile ${{ env.AWS_BACKEND_PROFILE }}
+      #     aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }} --profile ${{ env.AWS_BACKEND_PROFILE }}
+      #     aws configure set aws_session_token ${{ env.AWS_SESSION_TOKEN }} --profile ${{ env.AWS_BACKEND_PROFILE }}
+      #     aws configure set region ${{ env.AWS_REGION }} --profile ${{ env.AWS_BACKEND_PROFILE }}  
 
-      - name: Sts GetCallerIdentity
-        run: |
-          aws configure list-profiles
-        
       # - name: Configure AWS Credentials
       #   uses: aws-actions/configure-aws-credentials@v3
       #   with:
@@ -74,11 +80,11 @@ jobs:
       # - name: Check credentials
       #   run: aws sts get-caller-identity
 
-      # - name: Terraform Init
-      #   run: terraform init
+      - name: Terraform Init
+        run: terraform init
 
-      # - name: Terraform Plan
-      #   run: terraform plan -out=tfplan-${{ matrix.workspace }} -var-file="environments/${{ matrix.workspace }}/terraform.tfvars"
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan-${{ matrix.workspace }} -var-file="environments/${{ matrix.workspace }}/terraform.tfvars"
 
       # # Apply only if the commit is in the main branch (merged PR)
       # - name: Terraform Apply
