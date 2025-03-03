@@ -39,10 +39,13 @@ jobs:
           role-to-assume: arn:aws:iam::011624006725:role/GitHubAction-AssumeRoleWithAction
           role-session-name: GitHub_to_AWS_via_FederatedOIDC
           aws-region: ${{ env.AWS_REGION }}
+          aws-profile: central-account
       
       - name: Sts GetCallerIdentity
         run: |
           aws sts get-caller-identity
+          aws configure list-profiles
+
 
       # - name: Configure AWS Credentials
       #   uses: aws-actions/configure-aws-credentials@v3
@@ -53,13 +56,13 @@ jobs:
       # - name: Check credentials
       #   run: aws sts get-caller-identity
 
-      - name: Terraform Init
-        run: terraform init
+      # - name: Terraform Init
+      #   run: terraform init
 
-      - name: Terraform Plan
-        run: terraform plan -out=tfplan-${{ matrix.workspace }} -var-file="environments/${{ matrix.workspace }}/terraform.tfvars"
+      # - name: Terraform Plan
+      #   run: terraform plan -out=tfplan-${{ matrix.workspace }} -var-file="environments/${{ matrix.workspace }}/terraform.tfvars"
 
-      # Apply only if the commit is in the main branch (merged PR)
-      - name: Terraform Apply
-        if: github.ref == 'refs/heads/main'
-        run: terraform apply -auto-approve -var-file="environments/${{ matrix.workspace }}/terraform.tfvars"
+      # # Apply only if the commit is in the main branch (merged PR)
+      # - name: Terraform Apply
+      #   if: github.ref == 'refs/heads/main'
+      #   run: terraform apply -auto-approve -var-file="environments/${{ matrix.workspace }}/terraform.tfvars"
