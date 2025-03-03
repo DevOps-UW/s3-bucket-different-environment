@@ -2,11 +2,11 @@
 region = "us-east-1"
 
 # Bucket name
-bucket_name = "854473044844-bbq-testing-bkt"
+bucket_name = "011624006725-bbq-testing-bkt"
 
 
 #s3 access loging (do not change this section however make sure the bucket name match the environmnet you want to peovision in)
-log_bucket_name = "854473044844-bbq-logs-test"
+log_bucket_name = "011624006725-bbq-logs-test"
 
 
 # Tags associated with the bucket
